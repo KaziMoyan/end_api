@@ -14,4 +14,10 @@ header('Content-Type: application/json');
 if ($method == 'GET' && $route == "api/hello") { 
     echo json_encode(['message' => 'Hello, this is my PHP endpoint']);
 }
+
+if ($method == 'GET' && $route == "api/get-all-users") { 
+   $users = new UserController;
+   $users->getUsers();
+}
+
 ?>
