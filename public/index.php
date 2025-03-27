@@ -19,5 +19,9 @@ if ($method == 'GET' && $route == "api/get-all-users") {
    $users = new UserController;
    $users->getUsers();
 }
+if ($method == 'POST' && $route == "api/creeate-new-user") { 
+    $users = new UserController;
+    $users->getUsers();
+ }
 
 ?>
