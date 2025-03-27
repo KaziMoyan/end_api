@@ -40,7 +40,7 @@ switch ($method) {
 
     case 'POST':
         if ($route === "api/create-new-user") {
-            $users->createNewUser();
+            $users->createNewUser();  
         } else {
             http_response_code(404);
             echo json_encode(["success" => false, "message" => "Invalid route"]);

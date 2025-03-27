@@ -27,15 +27,16 @@ class UserModel {
     public function createNewUser($name, $phone) {
         $sql = "INSERT INTO users(name, phone) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
-
+    
         if (!$stmt) {
             error_log("Create User Error: " . $this->conn->error);
             return false; 
         }
-
+    
         $stmt->bind_param("ss", $name, $phone);
         return $stmt->execute();
     }
+    
 
     public function updateUser($id, $name, $phone) {
         $sql = "UPDATE users SET name = ?, phone = ? WHERE id = ?";

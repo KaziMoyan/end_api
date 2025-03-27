@@ -12,25 +12,34 @@ class UserController {
     }
 
     public function createNewUser() {
-        $input = json_decode(file_get_contents('php://input'), true);
+        $input = json_decode(file_get_contents('php://input'), true);  //JSON input
+    
 
         if (json_last_error() !== JSON_ERROR_NONE || !isset($input['name']) || !isset($input['phone'])) {
-            http_response_code(400); 
+            http_response_code(400);  // Bad Request
             echo json_encode(["success" => false, "message" => "Invalid input or JSON data"]);
             return;
         }
+    
+        $name = $input['name'];
+        $phone = $input['phone'];
+    
 
         $user = new UserModel();
-        $result = $user->createNewUser($input['name'], $input['phone']);
-
+    
+        
+        $result = $user->createNewUser($name, $phone);
+    
+        
         if ($result) {
             http_response_code(201); 
             echo json_encode(["success" => true, "message" => "User created successfully"]);
         } else {
-            http_response_code(500); 
+            http_response_code(500);  
             echo json_encode(["success" => false, "message" => "Error creating user"]);
         }
     }
+    
 
     public function updateUser($id, $name = null, $phone = null) {
         if (!$name || !$phone) {
