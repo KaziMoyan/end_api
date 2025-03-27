@@ -1,18 +1,12 @@
-<?php
-class User {
-    private $conn; 
+<?php 
+require_once('config.php');
+
+class UserModel {
+    private $conn;
 
     public function __construct() {
-        $host = "localhost";
-        $username = "root";
-        $password = "";
-        $db_name = "end_api";
-
-        $this->conn = new mysqli($host, $username, $password, $db_name);
-
-        if ($this->conn->connect_error) {
-            die("Connection could not be established: " . $this->conn->connect_error);
-        }
+        $database = new Database();
+        $this->conn = $database->getConnection();
     }
 
     public function getAllUsers() {
@@ -34,8 +28,9 @@ class User {
         $sql = "INSERT INTO users(name, phone) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
 
-        if ($stmt === false) {
-            return false; // Statement preparation failed
+        if (!$stmt) {
+            error_log("Create User Error: " . $this->conn->error);
+            return false; 
         }
 
         $stmt->bind_param("ss", $name, $phone);
@@ -46,18 +41,26 @@ class User {
         $sql = "UPDATE users SET name = ?, phone = ? WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
 
-        if ($stmt === false) {
-            return false; // Statement preparation failed
+        if (!$stmt) {
+            error_log("Update User Error: " . $this->conn->error);
+            return false; 
         }
 
         $stmt->bind_param("ssi", $name, $phone, $id);
         return $stmt->execute();
     }
 
-    public function __destruct() { 
-        if ($this->conn) {
-            $this->conn->close();
+    public function deleteUser($id) { 
+        $sql = "DELETE FROM users WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+
+        if (!$stmt) {
+            error_log("Delete User Error: " . $this->conn->error);
+            return false; 
         }
+
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
     }
 }
 ?>
